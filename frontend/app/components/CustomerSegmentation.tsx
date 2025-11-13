@@ -7,63 +7,85 @@ interface CustomerSegmentationProps {
 export default function CustomerSegmentation({ segmentation }: CustomerSegmentationProps) {
   const { highRisk, mediumRisk, lowRisk, healthy } = segmentation;
 
-  const riskCategories = [
+  const sumShortage = (records: typeof highRisk) =>
+    records.reduce((total, record) => total + Math.max(0, record['Forecasted Escrow Shortage']), 0);
+
+  const sumSurplus = (records: typeof healthy) =>
+    records.reduce((total, record) => total + Math.max(0, record['Forecasted Escrow Surplus'] ?? 0), 0);
+
+  const segments = [
     {
-      label: 'High Risk',
+      key: 'high',
+      title: 'High Risk',
+      gradient: 'from-[#fde0e0] via-[#ffebee] to-white',
+      badgeClass: 'bg-[#d32f2f] text-white shadow-[0_8px_18px_rgba(211,47,47,0.18)]',
+      iconClass: 'bg-white/85 border border-white/70 text-[#c62828]',
       description: 'Shortage > $4,000',
-      data: highRisk,
-      gradient: 'from-[#d32f2f]/15 to-white',
-      badgeColor: 'bg-[#d32f2f]',
-      textColor: 'text-[#c62828]',
+      count: highRisk.length,
+      amount: sumShortage(highRisk),
+      amountLabel: 'Aggregate shortage',
+      valueColor: 'text-[#c62828]',
       icon: (
-        <svg className="w-5 h-5 text-[#c62828]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8 4.03-8 9-8 9 3.582 9 8z" />
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v4m0 4h.01M4.93 19h14.14a1 1 0 00.87-1.5L12.87 4.5a1 1 0 00-1.74 0L4.06 17.5A1 1 0 004.93 19z" />
         </svg>
       ),
     },
     {
-      label: 'Medium Risk',
-      description: 'Shortage $2,000 - $4,000',
-      data: mediumRisk,
-      gradient: 'from-[#f9a825]/18 to-white',
-      badgeColor: 'bg-[#f9a825]',
-      textColor: 'text-[#f57f17]',
+      key: 'medium',
+      title: 'Medium Risk',
+      gradient: 'from-[#ffe3ba] via-[#fff3e0] to-white',
+      badgeClass: 'bg-[#fb8c00] text-white shadow-[0_8px_18px_rgba(251,140,0,0.18)]',
+      iconClass: 'bg-white/85 border border-white/70 text-[#ef6c00]',
+      description: 'Shortage $2,000 – $4,000',
+      count: mediumRisk.length,
+      amount: sumShortage(mediumRisk),
+      amountLabel: 'Aggregate shortage',
+      valueColor: 'text-[#ef6c00]',
       icon: (
-        <svg className="w-5 h-5 text-[#f57f17]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l2.5 1.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
     },
     {
-      label: 'Low Risk',
+      key: 'low',
+      title: 'Low Risk',
+      gradient: 'from-[#e6f4ea] via-[#f4fbf5] to-white',
+      badgeClass: 'bg-[#43a047] text-white shadow-[0_8px_18px_rgba(67,160,71,0.18)]',
+      iconClass: 'bg-white/85 border border-white/70 text-[#2e7d32]',
       description: 'Shortage < $2,000',
-      data: lowRisk,
-      gradient: 'from-[#26a69a]/15 to-white',
-      badgeColor: 'bg-[#26a69a]',
-      textColor: 'text-[#00897b]',
+      count: lowRisk.length,
+      amount: sumShortage(lowRisk),
+      amountLabel: 'Aggregate shortage',
+      valueColor: 'text-[#2e7d32]',
       icon: (
-        <svg className="w-5 h-5 text-[#00897b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M12 22a10 10 0 110-20 10 10 0 010 20z" />
         </svg>
       ),
     },
     {
-      label: 'Healthy',
-      description: 'No shortage or surplus',
-      data: healthy,
-      gradient: 'from-[#43a047]/15 to-white',
-      badgeColor: 'bg-[#2e7d32]',
-      textColor: 'text-[#2e7d32]',
+      key: 'healthy',
+      title: 'Healthy',
+      gradient: 'from-[#d6f3ea] via-[#ebf9f3] to-white',
+      badgeClass: 'bg-[#00796b] text-white shadow-[0_8px_18px_rgba(0,121,107,0.18)]',
+      iconClass: 'bg-white/85 border border-white/70 text-[#00796b]',
+      description: 'No shortage • positive cushion',
+      count: healthy.length,
+      amount: sumSurplus(healthy),
+      amountLabel: 'Aggregate surplus',
+      valueColor: 'text-[#00796b]',
       icon: (
-        <svg className="w-5 h-5 text-[#2e7d32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M12 22a10 10 0 110-20 10 10 0 010 20z" />
         </svg>
       ),
     },
   ];
 
   return (
-    <div className="lg:col-span-2 section-wrapper p-6 sm:p-8 bg-white/70">
+    <div className="lg:col-span-2 section-wrapper p-6 sm:p-8 bg-white/70 h-full flex flex-col">
       <div className="flex items-center justify-between mb-6 gap-3">
         <div>
           <h2 className="text-xl font-bold text-gray-900">Customer Segmentation by Risk</h2>
@@ -73,41 +95,35 @@ export default function CustomerSegmentation({ segmentation }: CustomerSegmentat
           Export report
         </button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {riskCategories.map((category) => {
-          const totalAmount = category.data.reduce(
-            (sum, d) => sum + (category.label === 'Healthy' 
-              ? d["Forecasted Escrow Surplus"] 
-              : d["Forecasted Escrow Shortage"]), 
-            0
-          );
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
+        {segments.map((segment) => {
+          const formattedValue = `$${segment.amount.toLocaleString('en-US')}`;
 
           return (
             <div
-              key={category.label}
-              className={`relative overflow-hidden rounded-2xl border border-white shadow-sm hover:shadow-lg transition-shadow`}
+              key={segment.key}
+              className="relative overflow-hidden rounded-2xl border border-white shadow-sm hover:shadow-lg transition-shadow"
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${category.gradient}`}></div>
+              <div className={`absolute inset-0 bg-gradient-to-br ${segment.gradient}`}></div>
               <div className="relative flex items-center justify-between p-5 gap-6">
-              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4">
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <div className={`w-12 h-12 ${category.badgeColor} rounded-xl flex items-center justify-center text-white font-semibold shadow-md`}>
-                      {category.data.length}
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-sm font-semibold ${segment.badgeClass}`}>
+                      {segment.count.toLocaleString('en-US')}
                     </div>
-                    <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white/70 border border-white shadow-sm">
-                      {category.icon}
+                    <div className={`flex items-center justify-center w-9 h-9 rounded-full shadow-sm ${segment.iconClass}`}>
+                      {segment.icon}
                     </div>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900">{segment.title}</p>
+                    <p className="text-sm text-gray-600">{segment.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-900">{category.label}</p>
-                  <p className="text-sm text-gray-600">{category.description}</p>
+                <div className="text-right">
+                  <p className={`text-lg font-bold ${segment.valueColor}`}>{formattedValue}</p>
+                  <p className="text-xs text-gray-500 mt-1">{segment.amountLabel}</p>
                 </div>
-              </div>
-              <div className="text-right">
-                <p className={`text-lg font-bold ${category.textColor}`}>
-                  ${totalAmount.toLocaleString()}
-                </p>
-              </div>
               </div>
             </div>
           );

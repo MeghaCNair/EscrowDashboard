@@ -62,7 +62,7 @@ export default function DashboardHeader({
                 Real-time Escrow Intelligence
               </div>
               <h2 className="text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight">
-                Powering proactive decisions for {metrics.totalCustomers.toLocaleString()} escrow accounts
+                Powering proactive decisions for {metrics.totalCustomers.toLocaleString('en-US')} escrow accounts
               </h2>
               <p className="mt-3 text-base sm:text-lg text-gray-600 max-w-xl">
                 Prioritize outreach, monitor shortages, and stay ahead of customer expectations with Rocket Companies’ agent-first dashboard.
@@ -106,7 +106,7 @@ export default function DashboardHeader({
                   ></div>
                 </div>
                 <p className="mt-2 text-xs text-gray-500">
-                  {totalRiskCustomers.toLocaleString()} accounts require attention in the next cycle.
+                  {totalRiskCustomers.toLocaleString('en-US')} accounts require attention in the next cycle.
                 </p>
               </div>
             </div>
@@ -115,7 +115,7 @@ export default function DashboardHeader({
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <SummaryCard
               label="Active Accounts"
-              value={metrics.totalCustomers.toLocaleString()}
+              value={metrics.totalCustomers.toLocaleString('en-US')}
               helper="View performance overview"
               badge="+12% QoQ"
               href={navigation.overview}
@@ -123,7 +123,7 @@ export default function DashboardHeader({
             />
             <SummaryCard
               label="At-Risk Accounts"
-              value={totalRiskCustomers.toLocaleString()}
+              value={totalRiskCustomers.toLocaleString('en-US')}
               helper="See shortage breakdown"
               tone="critical"
               href={navigation.shortages}
@@ -131,7 +131,7 @@ export default function DashboardHeader({
             />
             <SummaryCard
               label="Upcoming Payments"
-              value={upcomingCount.toLocaleString()}
+              value={upcomingCount.toLocaleString('en-US')}
               helper="Review disbursement schedule"
               tone="warning"
               href={navigation.payments}
@@ -139,7 +139,7 @@ export default function DashboardHeader({
             />
             <SummaryCard
               label="Recent Interactions"
-              value={interactionCount.toLocaleString()}
+              value={interactionCount.toLocaleString('en-US')}
               helper="Analyze communication mix"
               tone="info"
               href={navigation.interactions}

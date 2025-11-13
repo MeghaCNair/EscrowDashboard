@@ -30,7 +30,7 @@ export default function TopShortages({ customers }: TopShortagesProps) {
             </div>
             <div className="text-right">
               <p className="text-lg font-bold text-[#d32f2f]">
-                ${customer["Forecasted Escrow Shortage"].toLocaleString()}
+                ${customer["Forecasted Escrow Shortage"].toLocaleString('en-US')}
               </p>
               <p className="text-xs text-gray-500">{customer.County}</p>
             </div>

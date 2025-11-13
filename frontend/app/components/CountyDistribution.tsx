@@ -21,9 +21,6 @@ export default function CountyDistribution({ countyCounts, totalCustomers, riskB
           <h2 className="text-xl font-bold text-gray-900">Distribution by County</h2>
           <p className="text-sm text-gray-500">Top locations driving current escrow workload</p>
         </div>
-        <span className="px-3 py-1 rounded-full bg-[#ffebee] text-[#d32f2f] text-xs font-medium">
-          {sortedEntries.length} counties
-        </span>
       </div>
       <div className="space-y-4">
         {sortedEntries.map(([county, count], index) => {

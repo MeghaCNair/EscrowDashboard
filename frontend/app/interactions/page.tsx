@@ -14,6 +14,7 @@ import {
   getUpcomingPayments,
 } from '../utils/calculations';
 import { useEscrowData } from '../hooks/useEscrowData';
+import AIChatWidget from '../components/AIChatWidget';
 
 const NAVIGATION_LINKS = {
   overview: '/overview',
@@ -53,7 +54,7 @@ export default function InteractionsPage() {
         <PageIntro
           kicker="Servicing Insights"
           title="Understand how borrowers are reaching out"
-          description={`Track ${interactionCount.toLocaleString()} borrower interactions and where they originated. Use this workspace to export daily digests for leadership and servicing teams.`}
+          description={`Track ${interactionCount.toLocaleString('en-US')} borrower interactions and where they originated. Use this workspace to export daily digests for leadership and servicing teams.`}
           actions={
             <a
               href="/interactions"
@@ -66,6 +67,21 @@ export default function InteractionsPage() {
             </a>
           }
         />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <AIChatWidget
+            title="Conversation summarizer"
+            description={`Produces instant recaps of inbound ${interactionCount.toLocaleString('en-US')} interactions and suggests follow-up cadences for each channel.`}
+            ctaLabel="Summarize today's calls"
+            tone="info"
+          />
+          <AIChatWidget
+            title="AI sentiment coach"
+            description="Analyzes call transcripts, scores borrower sentiment, and recommends behavioral cues for your next outreach."
+            ctaLabel="Review my coaching tips"
+            tone="success"
+          />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <InteractionTypes interactionTypes={interactionTypes} totalCustomers={metrics.totalCustomers} />

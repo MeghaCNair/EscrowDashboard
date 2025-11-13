@@ -14,7 +14,7 @@ export default function InteractionTypes({ interactionTypes, totalCustomers }: I
           <p className="text-sm text-gray-500">Channels used in the last 90 days</p>
         </div>
         <span className="px-3 py-1 rounded-full bg-white text-xs font-medium text-gray-500 border border-gray-200">
-          {totalInteractions.toLocaleString()} touchpoints
+          {totalInteractions.toLocaleString('en-US')} touchpoints
         </span>
       </div>
       <div className="space-y-4">

@@ -14,6 +14,7 @@ import {
 import { useEscrowData } from '../hooks/useEscrowData';
 import ShortageTable from '../components/ShortageTable';
 import { EscrowData } from '../types/escrow';
+import AIChatWidget from '../components/AIChatWidget';
 
 function computeRiskByCounty(segmentation: ReturnType<typeof segmentByRisk>) {
   const counties: Record<string, { high: number; medium: number; low: number }> = {};
@@ -83,7 +84,7 @@ export default function ShortagesPage() {
         <PageIntro
           kicker="Shortage Operations"
           title="Prioritise borrowers trending into escrow shortages"
-          description={`Review ${shortageQueue.length.toLocaleString()} customers projected to fall below required balances. Use the queue to triage outreach and keep escrow accounts compliant.`}
+          description={`Review ${shortageQueue.length.toLocaleString('en-US')} customers projected to fall below required balances. Use the queue to triage outreach and keep escrow accounts compliant.`}
           actions={
             <>
               <a
@@ -96,7 +97,7 @@ export default function ShortagesPage() {
                 </svg>
               </a>
               <span className="inline-flex items-center px-3 py-2 rounded-full text-xs font-medium text-gray-600 bg-gray-100 border border-gray-200">
-                High risk: {segmentation.highRisk.length.toLocaleString()} • Medium: {segmentation.mediumRisk.length.toLocaleString()}
+                High risk: {segmentation.highRisk.length.toLocaleString('en-US')} • Medium: {segmentation.mediumRisk.length.toLocaleString('en-US')}
               </span>
             </>
           }
@@ -110,6 +111,21 @@ export default function ShortagesPage() {
             countyCounts={getCountyDistribution(data)}
             totalCustomers={metrics.totalCustomers}
             riskBreakdown={computeRiskByCounty(segmentation)}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <AIChatWidget
+            title="AI shortage negotiator"
+            description="Simulates repayment plans, drafts hardship responses, and recommends tailored contact strategies per borrower risk."
+            ctaLabel="Draft an outreach script"
+            tone="critical"
+          />
+          <AIChatWidget
+            title="County risk intelligence bot"
+            description="Answers questions about county-level drivers, regulatory requirements, and signals that impact escrow cushions."
+            ctaLabel="Ask about county trends"
+            tone="info"
           />
         </div>
 

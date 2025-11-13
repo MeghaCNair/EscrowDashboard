@@ -91,25 +91,25 @@ export default function ScenarioModeler({ records }: ScenarioModelerProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <ScenarioCard
           title="Baseline shortage"
-          value={`$${scenario.baselineShortage.toLocaleString()}`}
+          value={`$${scenario.baselineShortage.toLocaleString('en-US')}`}
           description="Current forecast across selected borrowers"
           tone="critical"
         />
         <ScenarioCard
           title="Scenario shortage"
-          value={`$${scenario.scenarioShortage.toLocaleString()}`}
+          value={`$${scenario.scenarioShortage.toLocaleString('en-US')}`}
           description="After applying adjustments"
           tone={scenario.scenarioShortage <= scenario.baselineShortage ? 'success' : 'critical'}
         />
         <ScenarioCard
           title="Shortage delta"
-          value={`${shortageDelta >= 0 ? '+' : '-'}$${Math.abs(shortageDelta).toLocaleString()}`}
+          value={`${shortageDelta >= 0 ? '+' : '-'}$${Math.abs(shortageDelta).toLocaleString('en-US')}`}
           description={shortageDelta >= 0 ? 'Additional funding required' : 'Potential shortage avoided'}
           tone={shortageDelta >= 0 ? 'critical' : 'success'}
         />
         <ScenarioCard
           title="Surplus delta"
-          value={`${surplusDelta >= 0 ? '+' : '-'}$${Math.abs(surplusDelta).toLocaleString()}`}
+          value={`${surplusDelta >= 0 ? '+' : '-'}$${Math.abs(surplusDelta).toLocaleString('en-US')}`}
           description={surplusDelta >= 0 ? 'Excess escrow created' : 'Surplus consumed'}
           tone={surplusDelta >= 0 ? 'info' : 'warning'}
         />
@@ -191,12 +191,12 @@ export default function ScenarioModeler({ records }: ScenarioModelerProps) {
             <ul className="mt-3 text-sm text-gray-600 space-y-2 list-disc list-inside">
               <li>
                 A {taxDelta}% change to property taxes shifts shortage exposure by{' '}
-                <strong>{`${shortageDelta >= 0 ? '+' : '-'}$${Math.abs(shortageDelta).toLocaleString()}`}</strong> across the
+                <strong>{`${shortageDelta >= 0 ? '+' : '-'}$${Math.abs(shortageDelta).toLocaleString('en-US')}`}</strong> across the
                 selected cohort.
               </li>
               <li>
                 Adjusting contributions by {contributionDelta}% results in{' '}
-                <strong>{`${surplusDelta >= 0 ? 'additional surplus of' : 'using up'} $${Math.abs(surplusDelta).toLocaleString()}`}</strong>.
+                <strong>{`${surplusDelta >= 0 ? 'additional surplus of' : 'using up'} $${Math.abs(surplusDelta).toLocaleString('en-US')}`}</strong>.
               </li>
               <li>
                 Focus on counties with the largest shortage increase below to pre-empt borrower outreach.
@@ -226,10 +226,10 @@ export default function ScenarioModeler({ records }: ScenarioModelerProps) {
                   countyEntries.map((entry) => (
                     <tr key={entry.county} className="hover:bg-[#fffbf7] transition-colors">
                       <td className="py-2 text-gray-700 font-medium">{entry.county}</td>
-                      <td className="py-2 text-right text-gray-600">${entry.baseline.toLocaleString()}</td>
-                      <td className="py-2 text-right text-gray-600">${entry.scenario.toLocaleString()}</td>
+                      <td className="py-2 text-right text-gray-600">${entry.baseline.toLocaleString('en-US')}</td>
+                      <td className="py-2 text-right text-gray-600">${entry.scenario.toLocaleString('en-US')}</td>
                       <td className={`py-2 text-right font-semibold ${entry.difference >= 0 ? 'text-[#c62828]' : 'text-[#2e7d32]'}`}>
-                        {entry.difference >= 0 ? '+' : '-'}${Math.abs(entry.difference).toLocaleString()}
+                        {entry.difference >= 0 ? '+' : '-'}${Math.abs(entry.difference).toLocaleString('en-US')}
                       </td>
                     </tr>
                   ))

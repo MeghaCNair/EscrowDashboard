@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { EscrowData } from '../types/escrow';
 
 interface ShortageTableProps {
@@ -12,6 +12,20 @@ const riskStyles: Record<'high' | 'medium' | 'low', string> = {
   high: 'bg-[#ffebee] text-[#c62828] border border-[#ffcdd2]',
   medium: 'bg-[#fff3e0] text-[#ef6c00] border border-[#ffe0b2]',
   low: 'bg-[#f1f8e9] text-[#558b2f] border border-[#dcedc8]',
+};
+
+type FeedbackTone = 'success' | 'info' | 'warning' | 'error';
+
+interface FeedbackState {
+  tone: FeedbackTone;
+  message: string;
+}
+
+const feedbackToneStyles: Record<FeedbackTone, string> = {
+  success: 'border-green-200 bg-green-50 text-green-700',
+  info: 'border-[#bbdefb] bg-[#e3f2fd] text-[#0d47a1]',
+  warning: 'border-amber-200 bg-amber-50 text-amber-700',
+  error: 'border-red-200 bg-red-50 text-red-700',
 };
 
 function getRiskLevel(shortage: number): { label: string; tone: 'high' | 'medium' | 'low' } {
@@ -30,6 +44,13 @@ export default function ShortageTable({ records, pageSize = 15 }: ShortageTableP
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [selected, setSelected] = useState<EscrowData | null>(null);
+  const [feedback, setFeedback] = useState<FeedbackState | null>(null);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timeout = window.setTimeout(() => setFeedback(null), 5000);
+    return () => window.clearTimeout(timeout);
+  }, [feedback]);
 
   const sortedRecords = useMemo(
     () => [...records].sort((a, b) => b['Forecasted Escrow Shortage'] - a['Forecasted Escrow Shortage']),
@@ -56,16 +77,59 @@ export default function ShortageTable({ records, pageSize = 15 }: ShortageTableP
     setPage(1);
   };
 
+  const showFeedback = (tone: FeedbackTone, info: string) => {
+    setFeedback({ tone, message: info });
+  };
+
   const handleSendMessage = () => {
-    if (!message.trim()) return;
+    if (!message.trim()) {
+      showFeedback('info', 'Add a short note before sending a message to borrowers.');
+      return;
+    }
+
+    if (filteredRecords.length === 0) {
+      showFeedback('warning', 'No borrowers match the current filter. Try a different segment.');
+      return;
+    }
+
     setIsSending(true);
     const recipients = filteredRecords.map((record) => record['Loan Number']);
     setTimeout(() => {
       console.info('Sending message to loans:', recipients, 'Message:', message);
       setIsSending(false);
       setMessage('');
-      alert(`Message queued for ${recipients.length} borrowers.`);
+      showFeedback('success', `Message queued for ${recipients.length.toLocaleString('en-US')} borrowers.`);
     }, 600);
+  };
+
+  const renderFeedbackIcon = (tone: FeedbackTone) => {
+    switch (tone) {
+      case 'success':
+        return (
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        );
+      case 'warning':
+        return (
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M12 19a7 7 0 110-14 7 7 0 010 14z" />
+          </svg>
+        );
+      case 'error':
+        return (
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        );
+      case 'info':
+      default:
+        return (
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 19a7 7 0 110-14 7 7 0 010 14z" />
+          </svg>
+        );
+    }
   };
 
   return (
@@ -74,9 +138,10 @@ export default function ShortageTable({ records, pageSize = 15 }: ShortageTableP
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <h2 className="text-xl font-semibold text-slate-900">Shortage queue</h2>
           <p className="text-sm text-gray-500">
-            Showing {filteredRecords.length.toLocaleString()} of {sortedRecords.length.toLocaleString()} customers forecasted to fall below required escrow balances.
+            Showing {filteredRecords.length.toLocaleString('en-US')} of {sortedRecords.length.toLocaleString('en-US')} customers forecasted to fall below required escrow balances.
           </p>
         </div>
+
         <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
           <label className="text-xs uppercase tracking-wide text-gray-400">Filter</label>
           <select
@@ -103,13 +168,36 @@ export default function ShortageTable({ records, pageSize = 15 }: ShortageTableP
             disabled={isSending || !message.trim() || filteredRecords.length === 0}
             className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-[#d32f2f] text-white text-sm font-semibold shadow-md disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#b71c1c] transition-colors"
           >
-            {isSending ? 'Sending…' : `Send to ${filteredRecords.length.toLocaleString()} borrowers`}
+            {isSending ? 'Sending…' : `Send to ${filteredRecords.length.toLocaleString('en-US')} borrowers`}
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M22 2L11 13" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M22 2l-7 20-4-9-9-4 20-7z" />
             </svg>
           </button>
         </div>
+
+        {feedback ? (
+          <div
+            role="status"
+            className={`flex items-start justify-between gap-4 rounded-2xl border px-4 py-3 text-sm shadow-sm ${feedbackToneStyles[feedback.tone]}`}
+          >
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 text-current/80">{renderFeedbackIcon(feedback.tone)}</span>
+              <span className="font-medium">{feedback.message}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setFeedback(null)}
+              className="rounded-full p-1 text-current/60 hover:text-current"
+              aria-label="Dismiss notification"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        ) : null}
+
         <div className="flex items-center gap-3 text-sm text-gray-500">
           <span className="inline-flex items-center gap-1">
             <span className="inline-block w-2 h-2 rounded-full bg-[#c62828]" />
@@ -163,9 +251,9 @@ export default function ShortageTable({ records, pageSize = 15 }: ShortageTableP
                     </td>
                     <td className="px-6 py-4 text-gray-600">{record['Loan Number']}</td>
                     <td className="px-6 py-4 text-gray-600">{record.County}</td>
-                    <td className="px-6 py-4 text-gray-600">${record['Current Escrow Balance'].toLocaleString()}</td>
+                    <td className="px-6 py-4 text-gray-600">${record['Current Escrow Balance'].toLocaleString('en-US')}</td>
                     <td className="px-6 py-4 font-semibold text-[#c62828]">
-                      ${record['Forecasted Escrow Shortage'].toLocaleString()}
+                      ${record['Forecasted Escrow Shortage'].toLocaleString('en-US')}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${riskStyles[risk.tone]}`}>
@@ -204,17 +292,17 @@ export default function ShortageTable({ records, pageSize = 15 }: ShortageTableP
                 <DetailRow label="Contact" value={selected['Contact']} />
                 <DetailRow label="County" value={selected['County']} />
                 <DetailRow label="Property Address" value={selected['Property Address']} />
-                <DetailRow label="Current Balance" value={`$${selected['Current Balance'].toLocaleString()}`} />
-                <DetailRow label="Escrow Balance" value={`$${selected['Current Escrow Balance'].toLocaleString()}`} />
+                <DetailRow label="Current Balance" value={`$${selected['Current Balance'].toLocaleString('en-US')}`} />
+                <DetailRow label="Escrow Balance" value={`$${selected['Current Escrow Balance'].toLocaleString('en-US')}`} />
               </div>
               <div className="space-y-2">
-                <DetailRow label="Prev Tax" value={`$${selected['Prev Tax'].toLocaleString()}`} />
-                <DetailRow label="Prev Insurance" value={`$${selected['Prev Insurance'].toLocaleString()}`} />
-                <DetailRow label="Forecasted Tax" value={`$${selected['Forecasted Tax'].toLocaleString()}`} />
-                <DetailRow label="Forecasted Insurance" value={`$${selected['Forecasted Insurance'].toLocaleString()}`} />
+                <DetailRow label="Prev Tax" value={`$${selected['Prev Tax'].toLocaleString('en-US')}`} />
+                <DetailRow label="Prev Insurance" value={`$${selected['Prev Insurance'].toLocaleString('en-US')}`} />
+                <DetailRow label="Forecasted Tax" value={`$${selected['Forecasted Tax'].toLocaleString('en-US')}`} />
+                <DetailRow label="Forecasted Insurance" value={`$${selected['Forecasted Insurance'].toLocaleString('en-US')}`} />
                 <DetailRow
                   label="Forecasted Shortage"
-                  value={`$${selected['Forecasted Escrow Shortage'].toLocaleString()}`}
+                  value={`$${selected['Forecasted Escrow Shortage'].toLocaleString('en-US')}`}
                 />
               </div>
             </div>

@@ -5,6 +5,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import PageIntro from '../components/PageIntro';
 import ScenarioModeler from '../components/ScenarioModeler';
 import { useEscrowData } from '../hooks/useEscrowData';
+import AIChatWidget from '../components/AIChatWidget';
 
 const NAVIGATION_LINKS = {
   overview: '/overview',
@@ -42,6 +43,21 @@ export default function ScenarioPage() {
         />
 
         <ScenarioModeler records={data} />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <AIChatWidget
+            title="Scenario design copilot"
+            description="Translate plain-language what-if questions into model parameters and explain sensitivity across key KPIs."
+            ctaLabel="Plan a market shock test"
+            tone="info"
+          />
+          <AIChatWidget
+            title="Contribution advisor"
+            description="Recommends escrow contribution adjustments per borrower cohort to keep balances compliant under your selected scenario."
+            ctaLabel="Suggest contribution changes"
+            tone="success"
+          />
+        </div>
       </main>
     </div>
   );

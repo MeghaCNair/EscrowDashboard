@@ -4,7 +4,6 @@ import Navigation from '../components/Navigation';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PageIntro from '../components/PageIntro';
 import UpcomingPayments from '../components/UpcomingPayments';
-import CustomerSegmentation from '../components/CustomerSegmentation';
 import {
   calculateMetrics,
   segmentByRisk,
@@ -12,6 +11,7 @@ import {
   getUpcomingPayments,
 } from '../utils/calculations';
 import { useEscrowData } from '../hooks/useEscrowData';
+import AIChatWidget from '../components/AIChatWidget';
 
 const NAVIGATION_LINKS = {
   overview: '/overview',
@@ -50,13 +50,28 @@ export default function PaymentsPage() {
         <PageIntro
           kicker="Payment Operations"
           title="Coordinate tax and insurance disbursements"
-          description={`Monitor ${upcomingPayments.length.toLocaleString()} upcoming escrow disbursements. Use reminders to keep borrowers aware of their next payment milestone.`}
+          description={`Monitor ${upcomingPayments.length.toLocaleString('en-US')} upcoming escrow disbursements. Use reminders to keep borrowers aware of their next payment milestone.`}
           actions={
             <span className="inline-flex items-center px-3 py-2 rounded-full text-xs font-medium text-gray-600 bg-gray-100 border border-gray-200">
               Healthy coverage: {Math.round((segmentation.healthy.length / metrics.totalCustomers) * 100)}%
             </span>
           }
         />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <AIChatWidget
+            title="Payment reminder co-pilot"
+            description="Drafts borrower-friendly reminder scripts, recommends timing, and adapts tone based on historical responsiveness."
+            ctaLabel="Plan my reminder sequence"
+            tone="success"
+          />
+          <AIChatWidget
+            title="Disbursement QA assistant"
+            description="Cross-checks escrow balances against scheduled disbursements and flags accounts at risk of shortfall before funding."
+            ctaLabel="Run a pre-disbursement check"
+            tone="info"
+          />
+        </div>
 
         <UpcomingPayments customers={upcomingPayments} />
       </main>
