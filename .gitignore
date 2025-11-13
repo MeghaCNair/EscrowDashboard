@@ -1,0 +1,25 @@
+# Root ignores
+.DS_Store
+Thumbs.db
+
+# Python
+venv/
+backend/venv/
+**/__pycache__/
+*.py[cod]
+
+# Node / Next.js (frontend app)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.turbo/
+
+# Logs
+*.log
+*.log.*
+
+# Environment files
+.env
+.env.*
+
