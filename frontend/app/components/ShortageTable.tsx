@@ -132,6 +132,9 @@ export default function ShortageTable({ records, pageSize = 15 }: ShortageTableP
     }
   };
 
+  const firstRow = filteredRecords.length === 0 ? 0 : offset + 1;
+  const lastRow = filteredRecords.length === 0 ? 0 : Math.min(offset + visible.length, filteredRecords.length);
+
   return (
     <div className="section-wrapper bg-white p-0 overflow-hidden">
       <div className="px-6 py-5 border-b border-gray-100 space-y-4">
@@ -267,6 +270,39 @@ export default function ShortageTable({ records, pageSize = 15 }: ShortageTableP
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex flex-col gap-3 px-6 py-4 border-t border-gray-100 bg-white text-sm text-gray-600 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          {filteredRecords.length === 0 ? 'No results to display.' : `Showing ${firstRow.toLocaleString('en-US')}-${lastRow.toLocaleString('en-US')} of ${filteredRecords.length.toLocaleString('en-US')} borrowers`}
+        </div>
+        <div className="inline-flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+            className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500 transition-colors disabled:cursor-not-allowed disabled:opacity-40 hover:border-[#d32f2f]/40 hover:text-[#d32f2f]"
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Prev
+          </button>
+          <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={currentPage === totalPages}
+            className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500 transition-colors disabled:cursor-not-allowed disabled:opacity-40 hover:border-[#d32f2f]/40 hover:text-[#d32f2f]"
+          >
+            Next
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {selected ? (
