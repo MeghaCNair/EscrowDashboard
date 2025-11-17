@@ -115,8 +115,52 @@ export default function ScenarioModeler({ records }: ScenarioModelerProps) {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-1 space-y-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <ControlGroup
+          label="Tax projection"
+          description="Adjust future property tax movements"
+        >
+          <Slider
+            value={taxDelta}
+            min={-10}
+            max={20}
+            step={1}
+            onChange={setTaxDelta}
+            suffix="%"
+          />
+        </ControlGroup>
+
+        <ControlGroup
+          label="Insurance projection"
+          description="Adjust annual insurance premium changes"
+        >
+          <Slider
+            value={insuranceDelta}
+            min={-10}
+            max={20}
+            step={1}
+            onChange={setInsuranceDelta}
+            suffix="%"
+          />
+        </ControlGroup>
+
+        <ControlGroup
+          label="Escrow contributions"
+          description="Increase annual contributions to offset shortage"
+        >
+          <Slider
+            value={contributionDelta}
+            min={-10}
+            max={25}
+            step={1}
+            onChange={setContributionDelta}
+            suffix="%"
+          />
+        </ControlGroup>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+        <div className="lg:col-span-1">
           <ControlGroup
             label="Risk segment"
             description="Model impact for a specific borrower cohort"
@@ -141,52 +185,10 @@ export default function ScenarioModeler({ records }: ScenarioModelerProps) {
               ))}
             </div>
           </ControlGroup>
-
-          <ControlGroup
-            label="Tax projection"
-            description="Adjust future property tax movements"
-          >
-            <Slider
-              value={taxDelta}
-              min={-10}
-              max={20}
-              step={1}
-              onChange={setTaxDelta}
-              suffix="%"
-            />
-          </ControlGroup>
-
-          <ControlGroup
-            label="Insurance projection"
-            description="Adjust annual insurance premium changes"
-          >
-            <Slider
-              value={insuranceDelta}
-              min={-10}
-              max={20}
-              step={1}
-              onChange={setInsuranceDelta}
-              suffix="%"
-            />
-          </ControlGroup>
-
-          <ControlGroup
-            label="Escrow contributions"
-            description="Increase annual contributions to offset shortage"
-          >
-            <Slider
-              value={contributionDelta}
-              min={-10}
-              max={25}
-              step={1}
-              onChange={setContributionDelta}
-              suffix="%"
-            />
-          </ControlGroup>
         </div>
 
-        <div className="lg:col-span-3 space-y-6">
-          <div className="rounded-2xl border border-gray-100 bg-white px-5 py-4 shadow-sm">
+        <div className="lg:col-span-3">
+          <div className="rounded-2xl border border-gray-100 bg-white px-5 py-4 shadow-sm h-full">
             <h4 className="text-sm font-semibold text-slate-900">Key takeaways</h4>
             <ul className="mt-3 text-sm text-gray-600 space-y-2 list-disc list-inside">
               <li>
@@ -203,7 +205,9 @@ export default function ScenarioModeler({ records }: ScenarioModelerProps) {
               </li>
             </ul>
           </div>
+        </div>
 
+        <div className="lg:col-span-4">
           <div className="rounded-2xl border border-gray-100 bg-white px-5 py-4 shadow-sm overflow-x-auto">
             <h4 className="text-sm font-semibold text-slate-900 mb-3">Top impacted counties</h4>
             <table className="min-w-full text-sm">
