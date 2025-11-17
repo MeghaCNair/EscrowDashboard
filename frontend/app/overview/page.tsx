@@ -13,7 +13,6 @@ import {
 } from '../utils/calculations';
 import { useEscrowData } from '../hooks/useEscrowData';
 import Link from 'next/link';
-import AIChatWidget from '../components/AIChatWidget';
 
 const NAVIGATION_LINKS = {
   overview: '/overview',
@@ -126,23 +125,32 @@ export default function OverviewPage() {
             <div className="rounded-3xl border border-white bg-white/90 px-5 py-5 shadow-sm">
               <h3 className="text-lg font-semibold text-slate-900">AI copilots on deck</h3>
               <p className="mt-1 text-sm text-gray-600">
-                Reserve space for conversational agents once LLM integrations are ready. Capture ideas now so implementation is
-                plug-and-play later.
+                Explore every prototype in the new AI Copilot Lab. Review scripted demos, transcripts, and rollout plans in one hub so your
+                teams can decide which copilots to launch next.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <AIChatWidget
-                title="Escrow shortage triage assistant"
-                description="Guides agents through borrower outreach sequences, drafts personalized messages, and surfaces risk drivers instantly."
-                ctaLabel="Chat about a borrower portfolio"
-                tone="critical"
-              />
-              <AIChatWidget
-                title="Executive briefing copilot"
-                description={`Summarizes KPIs, builds leadership-ready talking points, and flags emerging trends across ${interactionCount.toLocaleString('en-US')} recent interactions.`}
-                ctaLabel="Draft my daily digest"
-                tone="info"
-              />
+            <div className="rounded-3xl border border-[#d7e6fb] bg-gradient-to-br from-[#e3f2fd] via-white to-white px-6 py-6 shadow-sm">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-[#cfe0fc] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#0d47a1]">
+                    New workspace
+                  </span>
+                  <h4 className="mt-3 text-xl font-semibold text-slate-900">Centralize every AI assistant concept</h4>
+                  <p className="mt-2 text-sm text-gray-600">
+                    Browse outage mitigators, leadership digests, conversation copilots, and compliance scouts in a single gallery, each tagged
+                    by the dashboard section it supports.
+                  </p>
+                </div>
+                <Link
+                  href="/assistants"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#1565c0] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#0d47a1]"
+                >
+                  Open AI Copilot Lab
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
             </div>
           </div>
         );

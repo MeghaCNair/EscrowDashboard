@@ -5,7 +5,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import PageIntro from '../components/PageIntro';
 import ScenarioModeler from '../components/ScenarioModeler';
 import { useEscrowData } from '../hooks/useEscrowData';
-import AIChatWidget from '../components/AIChatWidget';
 
 const NAVIGATION_LINKS = {
   overview: '/overview',
@@ -44,19 +43,25 @@ export default function ScenarioPage() {
 
         <ScenarioModeler records={data} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <AIChatWidget
-            title="Scenario design copilot"
-            description="Translate plain-language what-if questions into model parameters and explain sensitivity across key KPIs."
-            ctaLabel="Plan a market shock test"
-            tone="info"
-          />
-          <AIChatWidget
-            title="Contribution advisor"
-            description="Recommends escrow contribution adjustments per borrower cohort to keep balances compliant under your selected scenario."
-            ctaLabel="Suggest contribution changes"
-            tone="success"
-          />
+        <div className="rounded-3xl border border-[#d1c4e9] bg-white/90 px-6 py-6 shadow-sm">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900">Prototype copilots for scenario planning live in one hub</h3>
+              <p className="mt-1 text-sm text-gray-600">
+                Head to the AI Copilot Lab to explore scenario design, contribution advisor, and other forward-looking copilots alongside
+                shortage, payments, and interaction experiences.
+              </p>
+            </div>
+            <a
+              href="/assistants"
+              className="inline-flex items-center gap-2 rounded-full bg-[#7e57c2] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#5e35b1]"
+            >
+              Open AI Copilot Lab
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </div>
         </div>
       </main>
     </div>

@@ -2,8 +2,11 @@ interface AIChatWidgetProps {
   title: string;
   description: string;
   ctaLabel?: string;
+  ctaHref?: string;
+  onCtaClick?: () => void;
   comingSoonLabel?: string;
   tone?: 'default' | 'critical' | 'info' | 'success';
+  tags?: string[];
 }
 
 const toneStyles: Record<Required<AIChatWidgetProps>['tone'], { badge: string; button: string; buttonHover: string }> = {
@@ -33,8 +36,11 @@ export default function AIChatWidget({
   title,
   description,
   ctaLabel = 'Launch AI assistant',
+  ctaHref,
+  onCtaClick,
   comingSoonLabel = 'Coming soon',
   tone = 'default',
+  tags,
 }: AIChatWidgetProps) {
   const styles = toneStyles[tone];
 
@@ -50,16 +56,52 @@ export default function AIChatWidget({
       <h4 className="mt-4 text-lg font-semibold text-gray-900">{title}</h4>
       <p className="mt-2 text-sm text-gray-600 leading-relaxed">{description}</p>
 
-      <button
-        type="button"
-        disabled
-        className={`mt-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold opacity-70 cursor-not-allowed ${styles.button} ${styles.buttonHover}`}
-      >
-        {ctaLabel}
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
-      </button>
+      {tags?.length ? (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-500"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      ) : null}
+
+      {onCtaClick ? (
+        <button
+          type="button"
+          onClick={onCtaClick}
+          className={`mt-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${styles.button} ${styles.buttonHover}`}
+        >
+          {ctaLabel}
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </button>
+      ) : ctaHref ? (
+        <a
+          href={ctaHref}
+          className={`mt-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${styles.button} ${styles.buttonHover}`}
+        >
+          {ctaLabel}
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      ) : (
+        <button
+          type="button"
+          disabled
+          className={`mt-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold opacity-70 cursor-not-allowed ${styles.button} ${styles.buttonHover}`}
+        >
+          {ctaLabel}
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }

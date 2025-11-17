@@ -14,7 +14,6 @@ import {
   getUpcomingPayments,
 } from '../utils/calculations';
 import { useEscrowData } from '../hooks/useEscrowData';
-import AIChatWidget from '../components/AIChatWidget';
 
 const NAVIGATION_LINKS = {
   overview: '/overview',
@@ -68,19 +67,25 @@ export default function InteractionsPage() {
           }
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <AIChatWidget
-            title="Conversation summarizer"
-            description={`Produces instant recaps of inbound ${interactionCount.toLocaleString('en-US')} interactions and suggests follow-up cadences for each channel.`}
-            ctaLabel="Summarize today's calls"
-            tone="info"
-          />
-          <AIChatWidget
-            title="AI sentiment coach"
-            description="Analyzes call transcripts, scores borrower sentiment, and recommends behavioral cues for your next outreach."
-            ctaLabel="Review my coaching tips"
-            tone="success"
-          />
+        <div className="rounded-3xl border border-[#d7e6fb] bg-white/90 px-6 py-6 shadow-sm">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900">Preview AI copilots for interaction teams</h3>
+              <p className="mt-1 text-sm text-gray-600">
+                The AI Copilot Lab houses conversation summarizers, coaching copilots, and leadership digests with detailed demos so your
+                interaction leads can experiment in one place.
+              </p>
+            </div>
+            <a
+              href="/assistants"
+              className="inline-flex items-center gap-2 rounded-full bg-[#1565c0] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#0d47a1]"
+            >
+              Open AI Copilot Lab
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

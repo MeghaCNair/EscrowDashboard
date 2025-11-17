@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { label: 'Shortages', href: '/shortages' },
   { label: 'Payments', href: '/payments' },
   { label: 'Interactions', href: '/interactions' },
+  { label: 'AI Copilots', href: '/assistants' },
   { label: 'Modeling', href: '/scenario' },
 ];
 

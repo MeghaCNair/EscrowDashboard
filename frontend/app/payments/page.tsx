@@ -11,7 +11,6 @@ import {
   getUpcomingPayments,
 } from '../utils/calculations';
 import { useEscrowData } from '../hooks/useEscrowData';
-import AIChatWidget from '../components/AIChatWidget';
 
 const NAVIGATION_LINKS = {
   overview: '/overview',
@@ -58,19 +57,25 @@ export default function PaymentsPage() {
           }
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <AIChatWidget
-            title="Payment reminder co-pilot"
-            description="Drafts borrower-friendly reminder scripts, recommends timing, and adapts tone based on historical responsiveness."
-            ctaLabel="Plan my reminder sequence"
-            tone="success"
-          />
-          <AIChatWidget
-            title="Disbursement QA assistant"
-            description="Cross-checks escrow balances against scheduled disbursements and flags accounts at risk of shortfall before funding."
-            ctaLabel="Run a pre-disbursement check"
-            tone="info"
-          />
+        <div className="rounded-3xl border border-[#c8e6c9] bg-white/90 px-6 py-6 shadow-sm">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900">Looking for payment operations copilots?</h3>
+              <p className="mt-1 text-sm text-gray-600">
+                The AI Copilot Lab centralizes payment reminder and disbursement QA prototypes with detailed demos and rollout plans so your
+                team can evaluate them alongside shortage and interaction copilots.
+              </p>
+            </div>
+            <a
+              href="/assistants"
+              className="inline-flex items-center gap-2 rounded-full bg-[#2e7d32] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#1b5e20]"
+            >
+              Open AI Copilot Lab
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </div>
         </div>
 
         <UpcomingPayments customers={upcomingPayments} />

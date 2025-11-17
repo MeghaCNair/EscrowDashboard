@@ -14,7 +14,6 @@ import {
 import { useEscrowData } from '../hooks/useEscrowData';
 import ShortageTable from '../components/ShortageTable';
 import { EscrowData } from '../types/escrow';
-import AIChatWidget from '../components/AIChatWidget';
 
 function computeRiskByCounty(segmentation: ReturnType<typeof segmentByRisk>) {
   const counties: Record<string, { high: number; medium: number; low: number }> = {};
@@ -114,19 +113,25 @@ export default function ShortagesPage() {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <AIChatWidget
-            title="AI shortage negotiator"
-            description="Simulates repayment plans, drafts hardship responses, and recommends tailored contact strategies per borrower risk."
-            ctaLabel="Draft an outreach script"
-            tone="critical"
-          />
-          <AIChatWidget
-            title="County risk intelligence bot"
-            description="Answers questions about county-level drivers, regulatory requirements, and signals that impact escrow cushions."
-            ctaLabel="Ask about county trends"
-            tone="info"
-          />
+        <div className="rounded-3xl border border-[#f6d5d5] bg-white/90 px-6 py-6 shadow-sm">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900">Need AI back-up for shortage outreach?</h3>
+              <p className="mt-1 text-sm text-gray-600">
+                Visit the AI Copilot Lab to explore negotiators, county intelligence bots, and executive digests in one place. Each copilot
+                includes sample transcripts and rollout plans tailored to shortage operations.
+              </p>
+            </div>
+            <a
+              href="/assistants"
+              className="inline-flex items-center gap-2 rounded-full bg-[#d32f2f] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#b71c1c]"
+            >
+              Open AI Copilot Lab
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </div>
         </div>
 
         <ShortageTable records={shortageQueue} />
